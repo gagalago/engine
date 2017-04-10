@@ -24,7 +24,7 @@ The engine is the main service of the API.
 | `RABBITMQ_PASSWORD` | `""`| String | Required | | `"root"` |
 | `RABBITMQ_EXCHANGE_NAME` | `""`| String | Required | | `"babili"` |
 | `RABBITMQ_EXCHANGE_DURABLE` | `""`| String | Required | | `"true"` |
-| `RAILS_ENV` | `""`| String | Required | | `"development"` |
+| `SENTRY_DSN` | `""`| String | Optional | | `"https://.."` |
 
 
 # Existing api routes: 
