@@ -1,0 +1,18 @@
+common: &default_settings
+  adapter: postgresql
+  database: <%= ENV["DB_NAME"] || "engine" %>
+  host: <%= ENV["DB_HOST"] %>
+  user: <%= ENV["DB_USER"] || "postgres" %>
+  port: <%= ENV["DB_PORT"] || 5432 %>
+  password: <%= ENV["DB_PASSWORD"] %>
+  pool: 50
+
+development:
+  <<: *default_settings
+
+test:
+  <<: *default_settings
+  database: "engine_test"
+
+production:
+  <<: *default_settings
