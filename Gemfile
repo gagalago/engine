@@ -3,7 +3,7 @@ source "http://rubygems.org"
 gem "pg",                  "0.19.0"
 gem "jwt",                 "1.5.6"
 gem "rails",               "5.0.1"
-gem "sentry-raven",        "2.3.0"
+gem "sentry-raven",        "2.3.0", require: false
 gem "sidekiq",             "4.2.9"
 gem "awesome_print",       "1.7.0"
 gem "rest-client",         "2.0.0"
