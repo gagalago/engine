@@ -11,6 +11,7 @@ services:
 
 before_install:
   - docker-compose -f docker-compose.test.yml build --pull
+  - sleep 2
   - docker-compose -f docker-compose.test.yml run engine rake db:test:prepare
 
 script:
