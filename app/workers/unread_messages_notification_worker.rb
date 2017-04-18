@@ -10,7 +10,7 @@ class UnreadMessagesNotificationWorker
                         .where(id: message_ids)
       unless messages.empty?
         mark_recipient_as_notified(messages, recipient_id)
-        call_platform_offline_hook(messages, platform_id)
+        call_platform_offline_hook(messages, recipient_id, platform_id)
         emit_event(messages, recipient_id)
       end
     end
@@ -25,12 +25,12 @@ class UnreadMessagesNotificationWorker
     end
   end
 
-  def call_platform_offline_hook(messages, platform_id)
+  def call_platform_offline_hook(messages, recipient_id, platform_id)
     platform = Platform.find(platform_id)
     if platform.has_offline_message_hook?
-      messages.each do |message|
-        UnreadMessagesHookWorker.perform_async(message.id, platform_id)
-      end
+      message_ids = messages.map(&:id)
+      digest_id = SecureRandom.uuid
+      UnreadMessagesHookWorker.perform_async(digest_id, recipient_id, message_ids, platform_id)
     end
   end
 

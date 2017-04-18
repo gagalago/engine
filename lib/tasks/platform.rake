@@ -1,19 +1,25 @@
-namespace :platform do
-  task create: :environment do
-    rsa_private = OpenSSL::PKey::RSA.generate(2048)
-    Platform.create(
-      name:         ENV["name"],
-      api_key:      ENV["api_key"],
-      api_secret:   ENV["api_secret"],
-      rsa_private:  rsa_private,
-      rsa_public:   rsa_private.public_key
-    )
+namespace :platforms do
+  task list: :environment do
+    ap "Available platforms:"
+    ap Platform.all
   end
 
-  task reset_keys_or_create: :environment do
-    platform            = Platform.find_or_initialize_by(name: ENV["name"])
-    platform.api_key    = ENV["api_key"]
-    platform.api_secret = ENV["api_secret"]
+  task create: :environment do
+    platform = PlatformFactory.build(data: { attributes: { name: ENV.fetch("name") } })
     platform.save!
+    ap "Platform created!"
+    ap platform
+  end
+
+  task generate_api_token: :environment do
+    platform = Platform.find_by!(name: ENV.fetch("name"))
+    ap "Your Token is: '#{platform.generate_jwt_token}'"
+  end
+
+  task set_messages_webhook: :environment do
+    platform = Platform.find_by!(name: ENV.fetch("name"))
+    platform.offline_user_message_hook_url = ENV.fetch("url")
+    platform.save!
+    ap "Your message digest webhook has been set to: '#{platform.offline_user_message_hook_url}'"
   end
 end
